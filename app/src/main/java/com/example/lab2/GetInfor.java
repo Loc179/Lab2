@@ -52,7 +52,6 @@ public class GetInfor extends AppCompatActivity {
                     if (name.isEmpty() || phone.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "du lieu chua du", Toast.LENGTH_SHORT).show();
                     } else {
-
                         //khai bao intent
                         Intent intent = new Intent();
                         //dong goi du lieu vao bundle

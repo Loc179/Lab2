@@ -1,5 +1,6 @@
 package com.example.lab2;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Adapter adapter;
     private EditText inputName;
     private Button addButton, deleteButton;
+    private int SelectedItemId;
 
 
     @Override
@@ -39,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a list of Contact objects
         contactList = new ArrayList<>();
-        contactList.add(new Contact(1, "Mot", "123", true));
+        contactList.add(new Contact(1, "Mot", "123", false));
         contactList.add(new Contact(2, "Hai", "456", false));
         contactList.add(new Contact(3, "Ba", "789", false));
         // Add more contacts as needed
@@ -48,29 +54,12 @@ public class MainActivity extends AppCompatActivity {
         adapter = new Adapter(contactList, this);
         listView.setAdapter(adapter);
 
-        // Set click listener for add button
-//        addButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String name = inputName.getText().toString();
-//                if (!name.isEmpty()) {
-//                    // Add new contact
-//                    int newId = contactList.size() + 1; // Incrementing ID
-//                    Contact newContact = new Contact(newId, name, "", false);
-//                    contactList.add(newContact);
-//                    adapter.notifyDataSetChanged();
-//                    inputName.setText("");
-//                } else {
-//                    Toast.makeText(MainActivity.this, "Please enter a name", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent openintent = new Intent(MainActivity.this, GetInfor.class);
-                startActivity(openintent);
+                startActivityForResult(openintent, 100);
             }
         });
 
@@ -114,6 +103,40 @@ public class MainActivity extends AppCompatActivity {
             contactList.add(newContact);
             adapter.notifyDataSetChanged();
         }
+    }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = new MenuInflater(this);
+        inflater.inflate(R.menu.context_menu,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.SbName){
+            Toast.makeText(this,"Sort by name", Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == R.id.SbPhone) {
+
+        } else if (item.getItemId() == R.id.Bd) {
+            Intent intent = new Intent("com.example.lab2.SOME_ACTION");
+            sendBroadcast(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = new MenuInflater(this);
+        inflater.inflate(R.menu.layout_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+
+        return super.onContextItemSelected(item);
     }
 }
